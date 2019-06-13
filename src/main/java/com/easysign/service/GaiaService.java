@@ -68,7 +68,7 @@ public class GaiaService {
 
 		ResponseEntity<Map> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Map.class);
 		if (responseEntity.getStatusCode().is5xxServerError()) {
-			log.warn("Server Error 500, infos : fetching tasks from user with mail : " + mail + " not working");
+			log.warn("Server Error 500, infos : fetching tasks from user with mail [{}] not working", mail);
 		}
 		return responseEntity.getBody();
 

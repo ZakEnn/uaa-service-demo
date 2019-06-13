@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers("/login/**", "/register/**", "/actuator/**").permitAll();
 		http.authorizeRequests().antMatchers("/config-service/**").hasAuthority("ADMIN");
+		http.authorizeRequests().antMatchers("/blockchain-service/**").permitAll();
 		http.authorizeRequests().antMatchers("/users/**", "/remove-user/**", "/appRoles/**").hasAuthority("ADMIN");
 		http.authorizeRequests().anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager()));
