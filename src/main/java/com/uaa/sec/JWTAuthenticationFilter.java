@@ -1,4 +1,4 @@
-package com.easysign.sec;
+package com.uaa.sec;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.easysign.entities.AppUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uaa.entities.AppUser;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private AuthenticationManager authenticationManager;

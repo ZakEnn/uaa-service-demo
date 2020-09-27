@@ -1,4 +1,4 @@
-package com.easysign.exception;
+package com.uaa.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

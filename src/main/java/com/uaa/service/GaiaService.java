@@ -1,4 +1,4 @@
-package com.easysign.service;
+package com.uaa.service;
 
 import java.util.Map;
 

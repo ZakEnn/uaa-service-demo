@@ -1,13 +1,13 @@
-package com.easysign.service;
+package com.uaa.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.easysign.dao.AppRoleRepository;
-import com.easysign.dao.AppUserRepository;
-import com.easysign.entities.AppRole;
-import com.easysign.entities.AppUser;
+import com.uaa.dao.AppRoleRepository;
+import com.uaa.dao.AppUserRepository;
+import com.uaa.entities.AppRole;
+import com.uaa.entities.AppUser;
 
 @Service
 @Transactional

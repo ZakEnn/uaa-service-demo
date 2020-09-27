@@ -1,4 +1,4 @@
-package com.easysign;
+package com.uaa;
 
 import java.util.stream.Stream;
 
@@ -11,9 +11,9 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.easysign.entities.AppRole;
-import com.easysign.service.AccountService;
-import com.easysign.service.DataRegister;
+import com.uaa.entities.AppRole;
+import com.uaa.service.AccountService;
+import com.uaa.service.DataRegister;
 
 @SpringBootApplication
 @EnableZuulProxy

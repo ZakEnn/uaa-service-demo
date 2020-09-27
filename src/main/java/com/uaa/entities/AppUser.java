@@ -1,4 +1,4 @@
-package com.easysign.entities;
+package com.uaa.entities;
 
 import java.util.ArrayList;
 import java.util.Collection;

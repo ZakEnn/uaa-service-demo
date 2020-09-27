@@ -1,4 +1,4 @@
-package com.easysign.sec;
+package com.uaa.sec;
 
 public interface SecurityParams {
 	public static final String JWT_HEADER_NAME = "Authorization";

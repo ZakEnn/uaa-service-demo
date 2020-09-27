@@ -1,11 +1,10 @@
-package com.easysign.web;
+package com.uaa.web;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,11 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.easysign.dao.AppUserRepository;
-import com.easysign.entities.AppUser;
-import com.easysign.service.AccountService;
-import com.easysign.service.DataRegister;
-import com.easysign.service.GaiaService;
+import com.uaa.dao.AppUserRepository;
+import com.uaa.entities.AppUser;
+import com.uaa.service.AccountService;
+import com.uaa.service.DataRegister;
+import com.uaa.service.GaiaService;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -49,9 +48,6 @@ public class UserController {
 
 	private RestTemplate restTemplate = new RestTemplate();
 
-	@Value("${app.message}")
-	private String welcomeMessage;
-
 	@GetMapping(value = "/refresh-config")
 	public @ResponseBody String refreshConfig() {
 
@@ -69,7 +65,6 @@ public class UserController {
 
 	@GetMapping("/users")
 	public List<AppUser> list() {
-		log.info("STARTING WITH : {} ", welcomeMessage);
 		log.info("get users list");
 		return appUserRepository.findAll();
 	}
@@ -155,6 +150,7 @@ public class UserController {
 				responseEntity.toString());
 
 		return responseEntity.getBody();
+
 	}
 
 	@PostMapping("/signing-process/{transactionId}")

@@ -1,7 +1,7 @@
-package com.easysign.service;
+package com.uaa.service;
 
-import com.easysign.entities.AppRole;
-import com.easysign.entities.AppUser;
+import com.uaa.entities.AppRole;
+import com.uaa.entities.AppUser;
 
 public interface AccountService {
 	public AppUser saveUser(DataRegister userForm);

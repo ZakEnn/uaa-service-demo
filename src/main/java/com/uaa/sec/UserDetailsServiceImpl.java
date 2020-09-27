@@ -1,4 +1,4 @@
-package com.easysign.sec;
+package com.uaa.sec;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.easysign.entities.AppUser;
-import com.easysign.service.AccountService;
+import com.uaa.entities.AppUser;
+import com.uaa.service.AccountService;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

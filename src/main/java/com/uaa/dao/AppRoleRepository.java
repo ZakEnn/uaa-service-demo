@@ -1,9 +1,9 @@
-package com.easysign.dao;
+package com.uaa.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import com.easysign.entities.AppRole;
+import com.uaa.entities.AppRole;
 
 @RepositoryRestResource
 public interface AppRoleRepository extends JpaRepository<AppRole, Long> {
