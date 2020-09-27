@@ -25,12 +25,12 @@ public class NotificationService {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 	}
 
-	public String signNotif(Map<String, String> model) {
+	public String sendNotif(Map<String, String> data) {
 		initHeader();
 
-		String url = notificationWs + "/transactions?inputInline=true";
+		String url = notificationWs + "/send-mail";
 
-		HttpEntity request = new HttpEntity<>(model, headers);
+		HttpEntity request = new HttpEntity<>(data, headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 		return response.getBody();
 

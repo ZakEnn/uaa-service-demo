@@ -1,6 +1,5 @@
 package com.uaa.web;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,7 +100,7 @@ public class UserController {
 		return null;
 	}
 
-	@PostMapping("/sign")
+	@PostMapping("/send-notification")
 	@ResponseStatus(HttpStatus.OK)
 	public String loadData(@RequestBody Map<String, String> dataObject) {
 		String userMail = dataObject.get("mail");
@@ -113,38 +111,7 @@ public class UserController {
 
 		log.info("send informations to (gaia service) : {} ", dataObject);
 
-		return notificationService.signNotif(dataObject);
-	}
-
-	@PostMapping("/send-to-blockchain-service")
-	@ResponseStatus(HttpStatus.OK)
-	public String loadDataToBlockchain(@RequestBody Map<String, Object> dataObject) {
-
-		String userMail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		dataObject.put("SenderMail", userMail);
-		log.info("send informations to (blockchain service) : {} ", dataObject);
-
-		Map<String, String> obj = new HashMap<>();
-		obj.put("senderMail", userMail);
-		obj.put("docBase64", (String) dataObject.get("pdfB64"));
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		String url = "http://localhost:9999/add-document/";
-		HttpEntity request = new HttpEntity<>(obj, headers);
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
-		String docNum = responseEntity.getBody();
-		log.info("add document base64 to blockchain : {} ---- result : {} ", dataObject.get("pdfB64"),
-				responseEntity.toString());
-
-		url = "http://localhost:9999/add-signers-toDoc/" + docNum;
-		request = new HttpEntity<>(dataObject.get("mails"), headers);
-		responseEntity = restTemplate.postForEntity(url, request, String.class);
-		log.info("add signers : {} to document [{}]  ---- result : {} ", dataObject.get("mails"), docNum,
-				responseEntity.toString());
-
-		return responseEntity.getBody();
-
+		return notificationService.sendNotif(dataObject);
 	}
 
 }
