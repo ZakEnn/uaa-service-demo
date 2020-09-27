@@ -25,7 +25,7 @@ import com.uaa.dao.AppUserRepository;
 import com.uaa.entities.AppUser;
 import com.uaa.service.AccountService;
 import com.uaa.service.DataRegister;
-import com.uaa.service.GaiaService;
+import com.uaa.service.NotificationService;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -33,10 +33,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RefreshScope
 public class UserController {
-
-	///////////////////////////////////////////////// :
-	////// USE DTO for mapping Bean with formated data/////
-	//////////////////////////////////////////////////
 	@Autowired
 	private AccountService accountService;
 
@@ -44,7 +40,7 @@ public class UserController {
 	private AppUserRepository appUserRepository;
 
 	@Autowired
-	private GaiaService gaiaService;
+	private NotificationService notificationService;
 
 	private RestTemplate restTemplate = new RestTemplate();
 
@@ -86,16 +82,14 @@ public class UserController {
 	@PostMapping("/register")
 	public void register(@RequestBody DataRegister userForm) {
 		log.info("register user with params : {} ", userForm);
-		AppUser result = accountService.saveUser(userForm);
-		return;
+		accountService.saveUser(userForm);
 	}
 
 	@PostMapping("/update-user/{mail}")
 	@ResponseStatus(HttpStatus.OK)
 	public void updateUser(@PathVariable String mail, @RequestBody DataRegister userForm) {
 		log.info("update user [{}] with params : {}", mail, userForm);
-		AppUser result = accountService.updateUser(mail, userForm);
-		return;
+		accountService.updateUser(mail, userForm);
 	}
 
 	@PostMapping("/login")
@@ -119,7 +113,7 @@ public class UserController {
 
 		log.info("send informations to (gaia service) : {} ", dataObject);
 
-		return gaiaService.signNotif(dataObject);
+		return notificationService.signNotif(dataObject);
 	}
 
 	@PostMapping("/send-to-blockchain-service")
@@ -151,34 +145,6 @@ public class UserController {
 
 		return responseEntity.getBody();
 
-	}
-
-	@PostMapping("/signing-process/{transactionId}")
-	@ResponseStatus(HttpStatus.OK)
-	public Map signing(@PathVariable String transactionId, @RequestBody Map<String, String> dataObject) {
-		log.info("otpk signing process from gaia service");
-		return gaiaService.signingProcess(transactionId, dataObject);
-
-	}
-
-	@GetMapping("/get-tasks")
-	public Map getTasks() {
-		log.info("get tasks attributed to authenticated user from gaia service");
-		String userMail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return gaiaService.getTasksByUser(userMail);
-
-	}
-
-	@GetMapping("/get-tasks/{mail}")
-	public Map getTasks(@PathVariable String mail) {
-		log.info("get tasks attributed to user with mail : {}", mail);
-		return gaiaService.getTasksByUser(mail);
-	}
-
-	@GetMapping("/get-task-description/{transactionId}/{taskName}")
-	public Map getTask(@PathVariable String transactionId, @PathVariable String taskName) {
-		log.info("get task description with transactionId : [{}] and taskName : {}", transactionId, taskName);
-		return gaiaService.getTaskForm(transactionId, taskName);
 	}
 
 }
