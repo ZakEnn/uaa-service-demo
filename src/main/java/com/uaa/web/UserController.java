@@ -1,7 +1,6 @@
 package com.uaa.web;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -98,20 +97,6 @@ public class UserController {
 			return user;
 		}
 		return null;
-	}
-
-	@PostMapping("/send-notification")
-	@ResponseStatus(HttpStatus.OK)
-	public String loadData(@RequestBody Map<String, String> dataObject) {
-		String userMail = dataObject.get("mail");
-		AppUser user = accountService.loadUserByUsername(userMail);
-		// add user details
-		dataObject.put("firstName", user.getFirstname());
-		dataObject.put("lastName", user.getLastname());
-
-		log.info("send informations to (gaia service) : {} ", dataObject);
-
-		return notificationService.sendNotif(dataObject);
 	}
 
 }
