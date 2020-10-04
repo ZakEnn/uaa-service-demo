@@ -1,4 +1,4 @@
-package com.uaa.web;
+package com.uaa.rest;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,13 +23,13 @@ import com.uaa.dao.AppUserRepository;
 import com.uaa.entities.AppUser;
 import com.uaa.service.AccountService;
 import com.uaa.service.DataRegister;
-import com.uaa.service.NotificationService;
 
 import lombok.extern.log4j.Log4j2;
 
 @RestController
 @Log4j2
 @RefreshScope
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 	@Autowired
 	private AccountService accountService;
@@ -36,15 +37,12 @@ public class UserController {
 	@Autowired
 	private AppUserRepository appUserRepository;
 
-	@Autowired
-	private NotificationService notificationService;
-
 	private RestTemplate restTemplate = new RestTemplate();
 
 	@GetMapping(value = "/refresh-config")
 	public @ResponseBody String refreshConfig() {
 
-		log.info("refreshing configuration lunched");
+		log.info("refreshing configuration launched");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 

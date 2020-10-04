@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers("/login/**", "/register/**", "/actuator/**").permitAll();
 		http.authorizeRequests().antMatchers("/config-service/**").hasAuthority("ADMIN");
-		http.authorizeRequests().antMatchers("/notification-service/**").hasAuthority("USER");
 		http.authorizeRequests().antMatchers("/send-notification/**").hasAuthority("USER");
 		http.authorizeRequests().antMatchers("/users/**", "/remove-user/**", "/appRoles/**").hasAuthority("ADMIN");
 		http.authorizeRequests().anyRequest().authenticated();

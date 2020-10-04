@@ -1,16 +1,18 @@
-package com.uaa.web;
+package com.uaa.rest;
 
 import java.security.Principal;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uaa.entities.AppUser;
+import com.uaa.rest.dto.NotificationDto;
+import com.uaa.rest.mapper.UserRestMapper;
 import com.uaa.service.AccountService;
 import com.uaa.service.NotificationService;
 
@@ -18,6 +20,7 @@ import lombok.extern.apachecommons.CommonsLog;
 
 @RestController
 @CommonsLog
+@CrossOrigin(origins = "http://localhost:4200")
 public class NotificationController {
 
 	@Autowired
@@ -28,15 +31,11 @@ public class NotificationController {
 
 	@PostMapping("/send-notification")
 	@ResponseStatus(HttpStatus.OK)
-	public String loadData(Principal principal, @RequestBody Map<String, Object> dataObject) {
-		log.info("user principal name : " + principal.getName());
+	public NotificationDto sendEmail(Principal principal, @RequestBody NotificationDto notificationDto) {
 		AppUser user = accountService.loadUserByUsername(principal.getName());
-		// add user details
-		dataObject.put("firstName", user.getFirstname());
-		dataObject.put("lastName", user.getLastname());
+		notificationDto.setSender(UserRestMapper.convertToDto(user));
+		log.info("send informations : " + notificationDto);
 
-		log.info("send informations : " + dataObject);
-
-		return notificationService.sendNotif(dataObject);
+		return notificationService.sendNotif(notificationDto);
 	}
 }
