@@ -1,5 +1,8 @@
 package com.uaa.rest.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 
 import com.uaa.entities.AppUser;
@@ -15,5 +18,9 @@ public final class UserRestMapper {
 
 	public static UserDto convertToDto(AppUser user) {
 		return modelMapper.map(user, UserDto.class);
+	}
+
+	public static List<UserDto> convertToDtos(List<AppUser> users) {
+		return users.stream().map(user -> UserRestMapper.convertToDto(user)).collect(Collectors.toList());
 	}
 }

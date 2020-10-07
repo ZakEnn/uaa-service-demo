@@ -1,5 +1,7 @@
 package com.uaa.service;
 
+import java.util.List;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +10,8 @@ import com.uaa.dao.AppRoleRepository;
 import com.uaa.dao.AppUserRepository;
 import com.uaa.entities.AppRole;
 import com.uaa.entities.AppUser;
+import com.uaa.rest.dto.UserDto;
+import com.uaa.rest.mapper.UserRestMapper;
 
 @Service
 @Transactional
@@ -75,6 +79,26 @@ public class AccountServiceImpl implements AccountService {
 		AppUser appUser = appUserRepository.findByEmail(username);
 		AppRole appRole = appRoleRepository.findByRoleName(rolename);
 		appUser.getRoles().add(appRole);
+	}
+
+	@Override
+	public void removeByMail(String mail) {
+		AppUser userToDelete = appUserRepository.findByEmail(mail);
+		appUserRepository.delete(userToDelete);
+	}
+
+	@Override
+	public UserDto login(String email) {
+		AppUser user = appUserRepository.findByEmail(email);
+		if (user != null) {
+			return UserRestMapper.convertToDto(user);
+		}
+		return null;
+	}
+
+	@Override
+	public List<UserDto> findAll() {
+		return UserRestMapper.convertToDtos(appUserRepository.findAll());
 	}
 
 }
