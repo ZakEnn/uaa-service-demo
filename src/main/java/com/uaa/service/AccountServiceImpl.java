@@ -10,12 +10,13 @@ import com.uaa.dao.AppRoleRepository;
 import com.uaa.dao.AppUserRepository;
 import com.uaa.entities.AppRole;
 import com.uaa.entities.AppUser;
+import com.uaa.rest.dto.DataRegister;
 import com.uaa.rest.dto.UserDto;
 import com.uaa.rest.mapper.UserRestMapper;
 
 @Service
 @Transactional
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements UserService {
 	private AppUserRepository appUserRepository;
 	private AppRoleRepository appRoleRepository;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -28,7 +29,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public AppUser saveUser(DataRegister userForm) {
+	public UserDto saveUser(DataRegister userForm) {
 		AppUser user = appUserRepository.findByEmail(userForm.getEmail());
 		if (user != null)
 			throw new RuntimeException("User already exists");
@@ -43,11 +44,11 @@ public class AccountServiceImpl implements AccountService {
 		appUser.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
 		appUserRepository.save(appUser);
 		addRoleToUser(userForm.getEmail(), "USER");
-		return appUser;
+		return UserRestMapper.convertToDto(appUser);
 	}
 
 	@Override
-	public AppUser updateUser(String mail, DataRegister userForm) {
+	public UserDto updateUser(String mail, DataRegister userForm) {
 		AppUser appUser = appUserRepository.findByEmail(mail);
 		if (appUser == null)
 			throw new RuntimeException("User Doesnt exists");
@@ -61,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
 		appUser.setActived(true);
 		appUser.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
 		appUserRepository.save(appUser);
-		return appUser;
+		return UserRestMapper.convertToDto(appUser);
 	}
 
 	@Override

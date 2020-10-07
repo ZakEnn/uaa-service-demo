@@ -13,16 +13,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.uaa.entities.AppUser;
-import com.uaa.service.AccountService;
+import com.uaa.service.UserService;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
-	private AccountService accountService;
+	private UserService userService;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		AppUser appUser = accountService.loadUserByUsername(username);
+	public UserDetails loadUserByUsername(String username) {
+		AppUser appUser = userService.loadUserByUsername(username);
 		if (appUser == null)
 			throw new UsernameNotFoundException("invalid user");
 		Collection<GrantedAuthority> authorities = new ArrayList<>();

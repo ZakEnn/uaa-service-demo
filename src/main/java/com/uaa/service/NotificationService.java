@@ -17,7 +17,8 @@ public class NotificationService {
 	@Autowired
 	RestTemplate restTemplate;
 
-	public NotificationDto sendNotif(NotificationDto notificationDto) {
+	public NotificationDto sendNotif(String userName, NotificationDto notificationDto) {
+		notificationDto.setSender(userName);
 		return restTemplate.postForObject(notificationWs + "/send-notification", notificationDto,
 				NotificationDto.class);
 	}

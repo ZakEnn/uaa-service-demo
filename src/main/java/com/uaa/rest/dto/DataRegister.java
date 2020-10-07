@@ -1,4 +1,4 @@
-package com.uaa.service;
+package com.uaa.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -11,17 +11,15 @@ import org.springframework.web.client.HttpStatusCodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 
 @ControllerAdvice
-public class SigningExceptionController {
+public class ExceptionController {
 
 	@ExceptionHandler({ HttpServerErrorException.class, HttpClientErrorException.class })
-	public ResponseEntity exception(HttpStatusCodeException exception) {
-
+	public ResponseEntity<String> exception(HttpStatusCodeException exception) {
 		return ResponseEntity.status(exception.getStatusCode()).body(exception.getResponseBodyAsString());
 	}
 
 	@ExceptionHandler({ TokenExpiredException.class })
-	public ResponseEntity TokenExpiredException(TokenExpiredException exception) {
-
+	public ResponseEntity<String> tokenExpiredException(TokenExpiredException exception) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage());
 	}
 

@@ -21,6 +21,6 @@ public final class UserRestMapper {
 	}
 
 	public static List<UserDto> convertToDtos(List<AppUser> users) {
-		return users.stream().map(user -> UserRestMapper.convertToDto(user)).collect(Collectors.toList());
+		return users.stream().map(UserRestMapper::convertToDto).collect(Collectors.toList());
 	}
 }
