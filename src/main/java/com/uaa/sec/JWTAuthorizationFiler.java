@@ -39,7 +39,6 @@ public class JWTAuthorizationFiler extends OncePerRequestFilter {
 			response.setStatus(HttpServletResponse.SC_OK);
 		} else if (request.getRequestURI().equals("/login")) {
 			filterChain.doFilter(request, response);
-			return;
 		} else {
 			String jwtToken = request.getHeader(SecurityParams.JWT_HEADER_NAME);
 			log.info("Token=" + jwtToken);
@@ -50,7 +49,6 @@ public class JWTAuthorizationFiler extends OncePerRequestFilter {
 			JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SecurityParams.SECRET)).build();
 			String jwt = jwtToken.substring(SecurityParams.HEADER_PREFIX.length());
 			DecodedJWT decodedJWT = verifier.verify(jwt);
-			// decodedJWT.getExpiresAt();
 			log.info("JWT=" + jwt);
 			String username = decodedJWT.getSubject();
 			List<String> roles = decodedJWT.getClaims().get("roles").asList(String.class);

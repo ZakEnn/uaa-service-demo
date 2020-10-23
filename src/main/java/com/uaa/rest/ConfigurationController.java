@@ -2,8 +2,9 @@ package com.uaa.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uaa.service.ConfigService;
@@ -19,9 +20,10 @@ public class ConfigurationController {
 	ConfigService configService;
 
 	@GetMapping(value = "/refresh-config")
-	public @ResponseBody String refreshConfig() {
+	public ResponseEntity<String> refreshConfig() {
 		log.info("refreshing configuration launched");
-		return configService.refresh();
+		String result = configService.refresh();
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 }

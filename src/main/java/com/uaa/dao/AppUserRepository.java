@@ -7,7 +7,5 @@ import com.uaa.entities.AppUser;
 
 @RepositoryRestResource
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
-
 	public AppUser findByEmail(String email);
-
 }
