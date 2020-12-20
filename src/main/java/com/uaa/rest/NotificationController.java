@@ -25,9 +25,6 @@ public class NotificationController {
 	@Autowired
 	NotificationService notificationService;
 
-	@Autowired
-	UserService userService;
-
 	@PostMapping("/send-notification")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<NotificationDto> sendEmail(Principal principal,
