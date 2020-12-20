@@ -26,7 +26,6 @@ public class NotificationController {
 	NotificationService notificationService;
 
 	@PostMapping("/send-notification")
-	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<NotificationDto> sendEmail(Principal principal,
 			@RequestBody NotificationDto notificationDto) {
 		log.info("send informations : " + notificationDto);
