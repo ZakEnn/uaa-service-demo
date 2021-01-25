@@ -28,19 +28,11 @@ public class AppUser {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String firstname;
-
-	private String lastname;
-
 	@Column(unique = true)
 	private String email;
 
-	private String phone;
-
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
-
-	private boolean actived;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Collection<AppRole> roles = new ArrayList<>();

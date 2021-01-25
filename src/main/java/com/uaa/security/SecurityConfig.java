@@ -1,4 +1,4 @@
-package com.uaa.sec;
+package com.uaa.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -28,10 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers("/login/**", "/register/**", "/actuator/**").permitAll();
-		http.authorizeRequests().antMatchers("/config-service/**").hasAuthority("ADMIN");
-		http.authorizeRequests().antMatchers("/send-notification/**").hasAuthority("USER");
-		http.authorizeRequests().antMatchers("/users/**", "/remove-user/**", "/appRoles/**").hasAuthority("ADMIN");
+		http.authorizeRequests().antMatchers("/login/**", "/register/**", "/users/**", "/ws-uaa/**").permitAll();
+	//	http.authorizeRequests().antMatchers("/users/**").hasAuthority("ADMIN");
 		http.authorizeRequests().anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager()));
 		http.addFilterBefore(new JWTAuthorizationFiler(), UsernamePasswordAuthenticationFilter.class);

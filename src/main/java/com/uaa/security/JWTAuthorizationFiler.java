@@ -1,4 +1,4 @@
-package com.uaa.sec;
+package com.uaa.security;
 
 import java.io.IOException;
 import java.util.ArrayList;

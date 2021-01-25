@@ -4,13 +4,12 @@ import java.util.List;
 
 import com.uaa.entities.AppRole;
 import com.uaa.entities.AppUser;
-import com.uaa.rest.dto.DataRegister;
 import com.uaa.rest.dto.UserDto;
 
 public interface UserService {
-	public UserDto saveUser(DataRegister userForm);
+	public void saveUser(UserDto userDto, String role);
 
-	public UserDto updateUser(String mail, DataRegister userForm);
+	public UserDto updatePassword(UserDto userDto);
 
 	public AppRole save(AppRole role);
 

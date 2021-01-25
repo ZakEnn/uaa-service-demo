@@ -1,4 +1,4 @@
-package com.uaa.sec;
+package com.uaa.security;
 
 public final class SecurityParams {
 	private SecurityParams() {

@@ -1,7 +1,11 @@
 package com.uaa;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
-public class UaaServiceApplicationTests {
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
+public class UaaServiceApplicationTests {
+    @Test
+    void contextLoads() {
+    }
 }

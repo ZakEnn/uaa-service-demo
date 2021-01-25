@@ -1,6 +1,7 @@
 package com.uaa.service;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,6 @@ import com.uaa.dao.AppRoleRepository;
 import com.uaa.dao.AppUserRepository;
 import com.uaa.entities.AppRole;
 import com.uaa.entities.AppUser;
-import com.uaa.rest.dto.DataRegister;
 import com.uaa.rest.dto.UserDto;
 import com.uaa.rest.mapper.UserRestMapper;
 
@@ -29,40 +29,28 @@ public class AccountServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDto saveUser(DataRegister userForm) {
+	public void saveUser(UserDto userForm, String role) {
 		AppUser user = appUserRepository.findByEmail(userForm.getEmail());
 		if (user != null)
 			throw new RuntimeException("User already exists");
-		if (!userForm.getPassword().equals(userForm.getConfirmedPassword()))
-			throw new RuntimeException("Please confirm your password");
+
 		AppUser appUser = new AppUser();
-		appUser.setFirstname(userForm.getFirstname());
-		appUser.setLastname(userForm.getLastname());
 		appUser.setEmail(userForm.getEmail());
-		appUser.setPhone(userForm.getPhone());
-		appUser.setActived(true);
 		appUser.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
 		appUserRepository.save(appUser);
-		addRoleToUser(userForm.getEmail(), "USER");
-		return UserRestMapper.convertToDto(appUser);
+		addRoleToUser(userForm.getEmail(), role.toUpperCase());
 	}
 
 	@Override
-	public UserDto updateUser(String mail, DataRegister userForm) {
-		AppUser appUser = appUserRepository.findByEmail(mail);
+	public UserDto updatePassword(UserDto userForm) {
+		AppUser appUser = appUserRepository.findByEmail(userForm.getEmail());
 		if (appUser == null)
 			throw new RuntimeException("User Doesnt exists");
-		if (!userForm.getPassword().equals(userForm.getConfirmedPassword()))
-			throw new RuntimeException("Please confirm your password");
 
-		appUser.setFirstname(userForm.getFirstname());
-		appUser.setLastname(userForm.getLastname());
 		appUser.setEmail(userForm.getEmail());
-		appUser.setPhone(userForm.getPhone());
-		appUser.setActived(true);
 		appUser.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
-		appUserRepository.save(appUser);
-		return UserRestMapper.convertToDto(appUser);
+		AppUser savedUser = appUserRepository.save(appUser);
+		return UserRestMapper.convertToDto(savedUser);
 	}
 
 	@Override
