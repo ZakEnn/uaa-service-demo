@@ -3,6 +3,7 @@ User Account and Authentication service use spring security and JWT for token ba
 
 # Application setup
 Run the app using maven command:
-
-  $mvn spring-boot:run
+```
+  $ mvn spring-boot:run
+```
 
