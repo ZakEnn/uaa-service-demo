@@ -14,7 +14,6 @@ import com.uaa.service.UserService;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @Log4j2
 public class UserController {
 	@Autowired
