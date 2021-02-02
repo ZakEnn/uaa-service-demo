@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.uaa.rest.dto.TokenDto;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +36,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			AppUser appUser = new ObjectMapper().readValue(request.getInputStream(), AppUser.class);
+			AppUser appUser = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+									.readValue(request.getInputStream(), AppUser.class);
 			return authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(appUser.getEmail(), appUser.getPassword()));
 		} catch (IOException e) {
@@ -50,11 +54,26 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		authResult.getAuthorities().forEach(a -> {
 			roles.add(a.getAuthority());
 		});
+
+		Date expirationDate = new Date(System.currentTimeMillis() + SecurityParams.EXPIRATION);
+
 		String jwt = JWT.create().withIssuer(request.getRequestURI()).withSubject(user.getUsername())
 				.withArrayClaim("roles", roles.toArray(new String[roles.size()]))
-				.withExpiresAt(new Date(System.currentTimeMillis() + SecurityParams.EXPIRATION))
+				.withExpiresAt(expirationDate)
 				.sign(Algorithm.HMAC256(SecurityParams.SECRET));
+
 		response.addHeader(SecurityParams.JWT_HEADER_NAME, jwt);
+
+		TokenDto tokenDto = new TokenDto();
+		tokenDto.setAccessToken(jwt);
+		tokenDto.setTokenType("Bearer");
+		tokenDto.setExpiresAt(expirationDate);
+
+		String json = new ObjectMapper().writeValueAsString(tokenDto);
+
+		response.getWriter().write(json);
+		response.setContentType("application/json");
+		response.flushBuffer();
 	}
 
 }

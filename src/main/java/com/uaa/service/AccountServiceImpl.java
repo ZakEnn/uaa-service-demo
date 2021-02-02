@@ -1,8 +1,14 @@
 package com.uaa.service;
 
+import java.security.Principal;
+import java.security.Security;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import lombok.extern.apachecommons.CommonsLog;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +19,13 @@ import com.uaa.entities.AppRole;
 import com.uaa.entities.AppUser;
 import com.uaa.rest.dto.UserDto;
 import com.uaa.rest.mapper.UserRestMapper;
+import org.springframework.util.StringUtils;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
 
 @Service
+@CommonsLog
 @Transactional
 public class AccountServiceImpl implements UserService {
 	private AppUserRepository appUserRepository;
@@ -29,7 +40,7 @@ public class AccountServiceImpl implements UserService {
 	}
 
 	@Override
-	public void saveUser(UserDto userForm, String role) {
+	public void saveUser(UserDto userForm) {
 		AppUser user = appUserRepository.findByEmail(userForm.getEmail());
 		if (user != null)
 			throw new RuntimeException("User already exists");
@@ -38,7 +49,7 @@ public class AccountServiceImpl implements UserService {
 		appUser.setEmail(userForm.getEmail());
 		appUser.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
 		appUserRepository.save(appUser);
-		addRoleToUser(userForm.getEmail(), role.toUpperCase());
+		addRoleToUser(userForm.getEmail(), userForm.getRole().toUpperCase());
 	}
 
 	@Override
@@ -77,17 +88,29 @@ public class AccountServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDto login(String email) {
+	public Map<String, String> login(HttpServletRequest request, String email) {
 		AppUser user = appUserRepository.findByEmail(email);
+		log.info("----login----");
 		if (user != null) {
-			return UserRestMapper.convertToDto(user);
+			final HttpServletRequest httpRequest = (HttpServletRequest)request;
+			//extract token from header
+			final String accessToken = httpRequest.getHeader("Authorization");
+			//return UserRestMapper.convertToDto(user);
+			log.info("login passed with token = " + accessToken);
+			return Map.of("accessToken", accessToken);
 		}
 		return null;
+
+
+
 	}
 
 	@Override
-	public List<UserDto> findAll() {
-		return UserRestMapper.convertToDtos(appUserRepository.findAll());
+	public List<String> findAll() {
+		return appUserRepository.findAll()
+				.stream()
+				.map(user -> user.getEmail())
+				.collect(Collectors.toList());
 	}
 
 }

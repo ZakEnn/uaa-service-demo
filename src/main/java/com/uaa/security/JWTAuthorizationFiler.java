@@ -37,7 +37,7 @@ public class JWTAuthorizationFiler extends OncePerRequestFilter {
 				"Access-Control-Allow-Origin, Access-Control-Allow-Credentials, authorization");
 		if (request.getMethod().equals("OPTIONS")) {
 			response.setStatus(HttpServletResponse.SC_OK);
-		} else if (request.getRequestURI().equals("/login")) {
+		} else if (request.getRequestURI().equals("/ws-uaa/login")) {
 			filterChain.doFilter(request, response);
 		} else {
 			String jwtToken = request.getHeader(SecurityParams.JWT_HEADER_NAME);

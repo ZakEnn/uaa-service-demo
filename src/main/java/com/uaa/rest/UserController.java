@@ -1,6 +1,7 @@
 package com.uaa.rest;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,31 +14,33 @@ import com.uaa.service.UserService;
 
 import lombok.extern.log4j.Log4j2;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @Log4j2
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 	@Autowired
 	private UserService userService;
 
 	@PostMapping("/login")
-	public ResponseEntity<UserDto> authenticate(@RequestBody UserDto userDto) {
-		UserDto userAuthenticated = userService.login(userDto.getEmail());
-		return ResponseEntity.status(HttpStatus.OK).body(userAuthenticated);
+	public ResponseEntity<Map<String,String>> authenticate(@RequestBody UserDto userDto, HttpServletRequest request) {
+		Map<String,String> token = userService.login(request, userDto.getEmail());
+		return ResponseEntity.status(HttpStatus.OK).body(token);
 	}
 
-	@PostMapping("/users/role/{role}")
-	public ResponseEntity<UserDto> register(@PathVariable String role, @RequestBody UserDto userDto) {
+	@PostMapping("/register")
+	public ResponseEntity<UserDto> register(@RequestBody UserDto userDto) {
 		log.info("register user with params : {} ", userDto);
-		userService.saveUser(userDto, role);
+		userService.saveUser(userDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@GetMapping("/users")
-	public ResponseEntity<List<UserDto>> getAllUsers() {
+	public ResponseEntity<List<String>> getAllUsers() {
 		log.info("get all users");
-		List<UserDto> usersDtos = userService.findAll();
-		return ResponseEntity.status(HttpStatus.OK).body(usersDtos);
+		List<String> users = userService.findAll();
+		return ResponseEntity.status(HttpStatus.OK).body(users);
 	}
 
 	@GetMapping("/users/{mail}")
